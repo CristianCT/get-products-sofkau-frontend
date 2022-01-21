@@ -19,3 +19,10 @@ export const categoriesLoading = () => {
       payload: error
     }
   }
+
+  export const addProductSuccess = (product) => {
+    return {
+      type: product.type,
+      payload: product
+    }
+  }

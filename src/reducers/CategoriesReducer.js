@@ -18,6 +18,12 @@ const CategoriesReducer = (state = initialState, action) => {
         case actionTypes.LOAD_CATEGORIES_FAILURE:
             return { ...state, isLoading: false, error: true }
 
+        case actionTypes.LOAD_PRODUCT_SUCCESS:
+            return { ...state, categories: [...state.categories, action.payload], isLoading: false, error: null }
+
+        case actionTypes.ASSIGN_PRODUCT_SUCCESS:
+            return { ...state, categories: [...state.categories, action.payload], isLoading: false, error: null }
+
         default:
             return state;
     }

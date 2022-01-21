@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
-import { categoriesSuccess } from "./actions/CategoriesActions"
+import { addProductSuccess } from "./actions/CategoriesActions"
 import Product from './components/Product';
 
-const client = new W3CWebSocket("ws://localhost:8080/retrieve/idnew");
+const client = new W3CWebSocket("ws://localhost:8080/retrieve/myid");
 
 class App extends Component {
 
@@ -16,7 +16,7 @@ class App extends Component {
     // TODO: Comprobar el tipo de evento
     client.onmessage = (message) => {
       const dataFromServer = JSON.parse(message.data);
-      this.props.dispatch(categoriesSuccess(dataFromServer));
+      this.props.dispatch(addProductSuccess(dataFromServer));
       console.log(dataFromServer);
     }
   }
