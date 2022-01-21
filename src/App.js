@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { w3cwebsocket as W3CWebSocket } from "websocket";
+import { categoriesSuccess } from "./actions/CategoriesActions"
+import Product from './components/Product';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const client = new W3CWebSocket("ws://localhost:8080/retrieve/idnew");
+
+class App extends Component {
+
+  componentDidMount(){
+    client.onopen = () => {
+      console.log("WebSocket Connected");
+    }
+
+    // TODO: Comprobar el tipo de evento
+    client.onmessage = (message) => {
+      const dataFromServer = JSON.parse(message.data);
+      this.props.dispatch(categoriesSuccess(dataFromServer));
+      console.log(dataFromServer);
+    }
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <center><h1 className="display-1">PRODUCTS LIST</h1></center>
+        <div className='products-list'>
+        {this.props.categories.map(product => {
+          return <Product key={product.productId} product={product} />
+        })}
+        </div>
+      </div>
+    )
+  }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  categories: state.categories.categories
+})
+
+export default connect(mapStateToProps)(App);
